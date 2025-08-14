@@ -274,11 +274,11 @@
             <form id="contact-form" class="max-w-xl mx-auto text-left space-y-4">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-300">Your Name</label>
-                    <input type="text" id="name" name="name" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" id="name" name="name" required class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300">Your Email</label>
-                    <input type="email" id="email" name="email" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="email" id="email" name="email" required class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <div class="flex justify-between items-center">
@@ -288,10 +288,13 @@
                             <span id="draft-loader" class="hidden h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></span>
                         </button>
                     </div>
-                    <textarea id="message" name="message" rows="4" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    <textarea id="message" name="message" rows="4" required class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform duration-300 transform hover:scale-105">Send Message</button>
+                    <button type="submit" id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform duration-300 transform hover:scale-105">
+                        Send Message
+                    </button>
+                    <p id="form-status" class="mt-4 text-sm text-gray-400"></p>
                 </div>
             </form>
         </section>
@@ -329,7 +332,7 @@
     </div>
 
 
-    <!-- JavaScript for Mobile Menu, Slider, and Gemini API -->
+    <!-- JavaScript for Mobile Menu, Slider, and Contact Form -->
     <script>
         // --- Mobile Menu ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -362,7 +365,7 @@
             });
         }
 
-        // --- Gemini API Contact Form Helper ---
+        // --- Gemini API & Contact Form Logic ---
         const draftMessageBtn = document.getElementById('draft-message-btn');
         const draftModal = document.getElementById('draft-modal');
         const closeModalBtn = document.getElementById('close-modal-btn');
@@ -372,6 +375,8 @@
         const emailInput = document.getElementById('email');
         const draftLoader = document.getElementById('draft-loader');
         const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formStatus = document.getElementById('form-status');
 
         draftMessageBtn.addEventListener('click', () => {
             draftModal.classList.remove('hidden');
@@ -381,7 +386,6 @@
             draftModal.classList.add('hidden');
         });
         
-        // Close modal if clicking outside of it
         draftModal.addEventListener('click', (e) => {
             if (e.target === draftModal) {
                  draftModal.classList.add('hidden');
@@ -392,44 +396,27 @@
             btn.addEventListener('click', async () => {
                 const purpose = btn.textContent;
                 const name = nameInput.value || 'there';
-                const email = emailInput.value;
                 draftModal.classList.add('hidden');
-                
-                if (!email) {
-                    messageTextarea.value = "Please enter your email address first.";
-                    return;
-                }
-
                 draftLoader.classList.remove('hidden');
                 messageTextarea.value = "✨ Drafting a message for you...";
 
-                // --- Call Gemini API ---
                 const prompt = `You are a professional assistant helping someone draft a message to M. Ahsan Abbasi, a backend engineer. The sender's name is '${name}'. The purpose of the message is a '${purpose}'. Draft a friendly, concise, and professional message of about 50-70 words. Start the message with "Hi Ahsan,".`;
                 
                 try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    const apiKey = "https://getapikey-982367067186.europe-west3.run.app";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                    
-                    const response = await fetch(apiUrl, {
+                    const geminiProxyUrl = 'https://getapikey-982367067186.europe-west3.run.app';
+                    const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+                    const response = await fetch(geminiProxyUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-
+                    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
                     const result = await response.json();
                     
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        messageTextarea.value = text;
+                    if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+                        messageTextarea.value = result.candidates[0].content.parts[0].text;
                     } else {
                        throw new Error("Invalid response structure from API.");
                     }
@@ -443,13 +430,41 @@
             });
         });
         
-        // --- Handle Form Submission ---
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // In a real application, you would send the form data to a server here.
-            // For this demo, we'll just show a confirmation.
-            alert("Thank you for your message! (This is a demo and no email was sent)");
-            contactForm.reset();
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            formStatus.textContent = '';
+
+            const formData = {
+                name: nameInput.value,
+                email: emailInput.value,
+                message: messageTextarea.value,
+            };
+
+            try {
+                const emailFunctionUrl = 'https://sendemail-982367067186.europe-west3.run.app';
+
+                const response = await fetch(emailFunctionUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    formStatus.textContent = 'Thank you for your message!';
+                    contactForm.reset();
+                } else {
+                    throw new Error('Failed to send message.');
+                }
+            } catch (error) {
+                console.error('Error sending email:', error);
+                formStatus.textContent = 'Sorry, there was an error. Please try again later.';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
         });
 
     </script>
