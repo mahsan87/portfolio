@@ -379,6 +379,14 @@
         const formStatus = document.getElementById('form-status');
 
         draftMessageBtn.addEventListener('click', () => {
+            if (!nameInput.checkValidity()) {
+                nameInput.reportValidity();
+                return;
+            }
+            if (!emailInput.checkValidity()) {
+                emailInput.reportValidity();
+                return;
+            }
             draftModal.classList.remove('hidden');
         });
 
