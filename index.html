@@ -152,7 +152,7 @@
         <nav class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="text-2xl font-bold">M. Ahsan Abbasi</div>
-                <div class="hidden md:flex items-center space-x-8" id="desktop-nav">
+                <div class="hidden lg:flex items-center space-x-8" id="desktop-nav">
                     <a href="#home" class="hover:text-blue-400 transition-colors duration-300">Home</a>
                     <a href="#about" class="hover:text-blue-400 transition-colors duration-300">About</a>
                     <a href="#skills" class="hover:text-blue-400 transition-colors duration-300">Skills</a>
@@ -168,12 +168,12 @@
                     </button>
                 </div>
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <button id="mobile-menu-button" class="lg:hidden focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
+            <div id="mobile-menu" class="hidden lg:hidden mt-4 space-y-2">
                  <!-- Mobile links will be injected here by JS -->
             </div>
         </nav>
@@ -500,7 +500,7 @@
                 mobileMenu.innerHTML = ''; 
                 
                 Array.from(desktopNav.children).forEach(node => {
-                    const clone = node.cloneNode(true);
+                    let clone = node.cloneNode(true);
                     if (clone.tagName === 'A') {
                         clone.classList.add('block', 'text-center', 'py-2', 'rounded-lg');
                         if(clone.href.includes('cv.html')) {
