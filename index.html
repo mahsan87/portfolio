@@ -8,22 +8,96 @@
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Inter & Inconsolata -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inconsolata:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- Custom Styles -->
     <style>
+        /* --- Base & Theme Variables --- */
+        :root {
+            --bg-color: #111827;
+            --text-color: #d1d5db;
+            --card-bg-color: #1f2937;
+            --header-bg-color: rgba(17, 24, 39, 0.8);
+            --highlight-color: #3b82f6;
+            --subtle-text-color: #9ca3af;
+            --input-bg-color: #374151;
+            --input-border-color: #4b5563;
+            --input-text-color: #d1d5db;
+            --slider-arrow-bg: rgba(55, 65, 81, 0.5);
+            --slider-arrow-hover-bg: rgba(75, 85, 99, 0.5);
+            --slider-arrow-color: #ffffff;
+        }
+
+        html.light {
+            --bg-color: #f9fafb;
+            --text-color: #374151;
+            --card-bg-color: #ffffff;
+            --header-bg-color: rgba(255, 255, 255, 0.8);
+            --highlight-color: #2563eb;
+            --subtle-text-color: #6b7280;
+            --input-bg-color: #f3f4f6;
+            --input-border-color: #d1d5db;
+            --input-text-color: #1f2937;
+            --slider-arrow-bg: rgba(229, 231, 235, 0.5);
+            --slider-arrow-hover-bg: rgba(209, 213, 219, 0.5);
+            --slider-arrow-color: #374151;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Dark background */
-            color: #d1d5db; /* Light gray text */
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
         }
-        /* Style for active navigation link */
-        .nav-link-active {
-            color: #3b82f6; /* Blue color for active link */
-            border-bottom: 2px solid #3b82f6;
+
+        /* --- Terminal Animation Styles --- */
+        .terminal-text {
+            font-family: 'Inconsolata', monospace;
+            white-space: pre-wrap;
+        }
+        .terminal-cursor {
+            display: inline-block;
+            background-color: var(--text-color);
+            width: 10px;
+            height: 1.5rem;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { background-color: transparent }
+            50% { background-color: var(--text-color); }
+        }
+
+        /* --- Scroll Animation Styles --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- General Component Styles --- */
+        header {
+            background-color: var(--header-bg-color);
+        }
+        .card {
+            background-color: var(--card-bg-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s;
+        }
+        html.light .card {
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .skill-tag {
+            background-color: var(--card-bg-color);
+            color: var(--highlight-color);
+            border: 1px solid var(--highlight-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         .slider-container {
             overflow: hidden;
@@ -37,39 +111,52 @@
             min-width: 100%;
             box-sizing: border-box;
         }
+        .form-input {
+            background-color: var(--input-bg-color);
+            border-color: var(--input-border-color);
+            color: var(--input-text-color);
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .slider-arrow {
+            background-color: var(--slider-arrow-bg);
+            color: var(--slider-arrow-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .slider-arrow:hover {
+            background-color: var(--slider-arrow-hover-bg);
+        }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Header & Navigation -->
-    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
+    <header class="backdrop-blur-sm sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
-                <div class="text-2xl font-bold text-white">M. Ahsan Abbasi</div>
+                <div class="text-2xl font-bold">M. Ahsan Abbasi</div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="nav-link hover:text-blue-400 transition-colors duration-300">Home</a>
-                    <a href="#about" class="nav-link hover:text-blue-400 transition-colors duration-300">About</a>
-                    <a href="#skills" class="nav-link hover:text-blue-400 transition-colors duration-300">Skills</a>
-                    <a href="#credentials" class="nav-link hover:text-blue-400 transition-colors duration-300">Credentials</a>
-                    <a href="#education" class="nav-link hover:text-blue-400 transition-colors duration-300">Education</a>
-                    <a href="#contact" class="nav-link hover:text-blue-400 transition-colors duration-300">Contact</a>
-                    <!-- Link to the separate CV page -->
+                    <a href="#home" class="hover:text-blue-400 transition-colors duration-300">Home</a>
+                    <a href="#about" class="hover:text-blue-400 transition-colors duration-300">About</a>
+                    <a href="#skills" class="hover:text-blue-400 transition-colors duration-300">Skills</a>
+                    <a href="#credentials" class="hover:text-blue-400 transition-colors duration-300">Credentials</a>
+                    <a href="#education" class="hover:text-blue-400 transition-colors duration-300">Education</a>
+                    <a href="#contact" class="hover:text-blue-400 transition-colors duration-300">Contact</a>
                     <a href="./cv/cv.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-transform duration-300 transform hover:scale-105">View CV</a>
+                    <button id="theme-toggle" class="p-2 rounded-full focus:outline-none">
+                        <!-- Moon Icon -->
+                        <svg id="theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <!-- Sun Icon -->
+                        <svg id="theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
                 </div>
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
-                 <a href="#home" class="block text-center py-2 hover:bg-gray-700 rounded-lg">Home</a>
-                 <a href="#about" class="block text-center py-2 hover:bg-gray-700 rounded-lg">About</a>
-                 <a href="#skills" class="block text-center py-2 hover:bg-gray-700 rounded-lg">Skills</a>
-                 <a href="#credentials" class="block text-center py-2 hover:bg-gray-700 rounded-lg">Credentials</a>
-                 <a href="#education" class="block text-center py-2 hover:bg-gray-700 rounded-lg">Education</a>
-                 <a href="#contact" class="block text-center py-2 hover:bg-gray-700 rounded-lg">Contact</a>
-                 <a href="./cv/cv.html" class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg mt-2">View CV</a>
+                 <!-- Mobile links will be injected here by JS -->
             </div>
         </nav>
     </header>
@@ -80,29 +167,16 @@
         <!-- Home Section -->
         <section id="home" class="min-h-screen flex items-center justify-center text-center">
             <div class="max-w-3xl">
-                <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight mb-4">Hey, I'm M. Ahsan Abbasi</h1>
-                <p class="text-lg md:text-xl text-gray-300 mb-8">Backend Engineer specializing in scalable and resilient enterprise systems.</p>
-                <div class="flex justify-center items-center gap-6 mb-8">
-                    <a href="https://www.linkedin.com/in/m-ahsan-abbasi/" target="_blank" rel="noopener noreferrer" aria-label="View my LinkedIn profile" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                        </svg>
-                    </a>
-                    <a href="https://github.com/mahsan87" target="_blank" rel="noopener noreferrer" aria-label="View my GitHub profile" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                    </a>
-                </div>
+                <div class="terminal-text text-2xl md:text-4xl lg:text-5xl font-semibold mb-8" id="terminal-intro"></div>
                 <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform duration-300 transform hover:scale-105">Get In Touch</a>
             </div>
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12">About Me</h2>
-            <div class="max-w-4xl mx-auto bg-gray-800 rounded-xl shadow-2xl p-8 md:p-12">
-                <p class="text-lg text-gray-300 leading-relaxed">
+        <section id="about" class="py-20 fade-in-section">
+            <h2 class="text-4xl font-bold text-center mb-12">About Me</h2>
+            <div class="max-w-4xl mx-auto card rounded-xl p-8 md:p-12">
+                <p class="text-lg leading-relaxed">
                     I am a results-oriented Software Engineer with over eight years of experience in the German software industry. My expertise lies in architecting and developing robust backend systems for high-traffic, business-critical platforms within the enterprise e-commerce and retail sectors.
                     <br><br>
                     Leveraging deep expertise in <strong>Go</strong>, <strong>PHP-Symfony</strong>, and <strong>cloud migration</strong>, my goal is to solve complex engineering challenges by modernizing legacy codebases and implementing clean, efficient solutions using Agile methodologies.
@@ -111,126 +185,122 @@
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12">My Skills</h2>
-            <div class="max-w-5xl mx-auto space-y-10 px-4">
-
-                <!-- Languages & Frameworks -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Languages & Frameworks</h3>
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Golang</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">PHP 8.3</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Symfony</span>
+        <section id="skills" class="py-20 fade-in-section">
+            <h2 class="text-4xl font-bold text-center mb-12">My Skills</h2>
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="space-y-10">
+                    <!-- Languages & Frameworks -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Languages & Frameworks</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Golang</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">PHP 8.3</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Symfony</span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- ORMs & Frontend -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">ORMs & Frontend</h3>
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Doctrine</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">GORM</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Vanilla JS</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Vue.js</span>
+                    <!-- ORMs & Frontend -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">ORMs & Frontend</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Doctrine</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">GORM</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Vanilla JS</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Vue.js</span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Cloud, Containers & IaC -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Cloud, Containers & IaC</h3>
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Stackit</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Cloud Foundry</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Kubernetes</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Docker</span>
+                    <!-- Cloud, Containers & IaC -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Cloud, Containers & IaC</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Stackit</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Cloud Foundry</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Kubernetes</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Docker</span>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Databases & Caching -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Databases & Caching</h3>
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Relational (SQL)</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">NoSQL</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Redis</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">CDNs</span>
+                    <!-- Databases & Caching -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Databases & Caching</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Relational (SQL)</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">NoSQL</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Redis</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">CDNs</span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Monitoring & Observability -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Monitoring & Observability</h3>
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Prometheus</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Grafana</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Kibana</span>
-                        <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Golden Signals</span>
+                    <!-- Monitoring & Observability -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">Monitoring & Observability</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Prometheus</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Grafana</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Kibana</span>
+                            <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Golden Signals</span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- DevOps & Project Management -->
-                <div>
-                    <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">DevOps & Project Management</h3>
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">CI/CD</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Jenkins</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Azure DevOps</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">GitHub</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Agile/Scrum</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Jira</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Confluence</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">API Design</span>
-                         <span class="bg-gray-700 text-gray-200 text-lg font-medium px-4 py-2 rounded-lg">Technical Project Management</span>
+                    <!-- DevOps & Project Management -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center md:text-left">DevOps & Project Management</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">CI/CD</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Jenkins</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Azure DevOps</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">GitHub</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Agile/Scrum</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Jira</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Confluence</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">API Design</span>
+                             <span class="skill-tag text-lg font-medium px-4 py-2 rounded-lg">Technical Project Management</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Credentials Section -->
-        <section id="credentials" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12">Trainings & Workshops</h2>
-            <div class="max-w-3xl mx-auto slider-container bg-gray-800 rounded-xl shadow-2xl">
+        <section id="credentials" class="py-20 fade-in-section">
+            <h2 class="text-4xl font-bold text-center mb-12">Trainings & Workshops</h2>
+            <div class="max-w-3xl mx-auto slider-container card rounded-xl">
                 <div class="slider-wrapper">
                     <!-- Slide 1 -->
                     <div class="slider-item p-8">
-                        <h3 class="text-2xl font-bold text-white mb-3">Golang Training</h3>
-                        <p class="text-gray-400 mb-4">(05/2023 - 11/2023)</p>
-                        <p class="text-gray-300">Participated in the internal Golang training course offered by the company. Training included hands-on exercises on Go and covered basics to advanced concepts.</p>
+                        <h3 class="text-2xl font-bold mb-3">Golang Training</h3>
+                        <p class="text-sm" style="color: var(--subtle-text-color);">(05/2023 - 11/2023)</p>
+                        <p class="mt-4">Participated in the internal Golang training course offered by the company. Training included hands-on exercises on Go and covered basics to advanced concepts.</p>
                     </div>
                     <!-- Slide 2 -->
                     <div class="slider-item p-8">
-                        <h3 class="text-2xl font-bold text-white mb-3">Agile Awareness Workshop</h3>
-                        <p class="text-gray-400 mb-4">(09/2022)</p>
-                        <p class="text-gray-300">The workshop provided an introduction to the topic of software development in the context of Agile.</p>
+                        <h3 class="text-2xl font-bold mb-3">Agile Awareness Workshop</h3>
+                        <p class="text-sm" style="color: var(--subtle-text-color);">(09/2022)</p>
+                        <p class="mt-4">The workshop provided an introduction to the topic of software development in the context of Agile.</p>
                     </div>
                     <!-- Slide 3 -->
                     <div class="slider-item p-8">
-                        <h3 class="text-2xl font-bold text-white mb-3">Azure DevOps "From zero to DevOps"</h3>
-                        <p class="text-gray-400 mb-4">(09/2021)</p>
-                        <p class="text-gray-300">The workshop provided an initial overview of the services provided in Azure DevOps. This includes an overview of all its services and detailed insights into the CI/CD pipeline.</p>
+                        <h3 class="text-2xl font-bold mb-3">Azure DevOps "From zero to DevOps"</h3>
+                        <p class="text-sm" style="color: var(--subtle-text-color);">(09/2021)</p>
+                        <p class="mt-4">The workshop provided an initial overview of the services provided in Azure DevOps. This includes an overview of all its services and detailed insights into the CI/CD pipeline.</p>
                     </div>
                     <!-- Slide 4 -->
                     <div class="slider-item p-8">
-                        <h3 class="text-2xl font-bold text-white mb-3">Symfony Live 2019</h3>
-                        <p class="text-gray-400 mb-4">(09/2019)</p>
-                        <p class="text-gray-300">Participated in various talks and workshops in Symfony Live 2019. Interesting topics include Profiling Symfony apps with Blackfire.io and Symfony Best Practices.</p>
+                        <h3 class="text-2xl font-bold mb-3">Symfony Live 2019</h3>
+                        <p class="text-sm" style="color: var(--subtle-text-color);">(09/2019)</p>
+                        <p class="mt-4">Participated in various talks and workshops in Symfony Live 2019. Interesting topics include Profiling Symfony apps with Blackfire.io and Symfony Best Practices.</p>
                     </div>
                     <!-- Slide 5 -->
                     <div class="slider-item p-8">
-                        <h3 class="text-2xl font-bold text-white mb-3">How to Lead Challenging Conversations</h3>
-                        <p class="text-gray-400 mb-4">(07/2025)</p>
-                        <p class="text-gray-300">Through this training, I was able to master advanced communication techniques enhancing my ability to analyse behavioral patterns and achieve positive resolutions in complex interpersonal dynamics.</p>
+                        <h3 class="text-2xl font-bold mb-3">How to Lead Challenging Conversations</h3>
+                        <p class="text-sm" style="color: var(--subtle-text-color);">(07/2025)</p>
+                        <p class="mt-4">Through this training, I was able to master advanced communication techniques enhancing my ability to analyse behavioral patterns and achieve positive resolutions in complex interpersonal dynamics.</p>
                     </div>
                 </div>
                 <!-- Slider Controls -->
                 <div class="absolute inset-y-0 left-0 flex items-center">
-                    <button id="prevBtn" class="bg-gray-700/50 hover:bg-gray-600/50 text-white p-2 rounded-full m-2">
+                    <button id="prevBtn" class="slider-arrow p-2 rounded-full m-2">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                     </button>
                 </div>
                 <div class="absolute inset-y-0 right-0 flex items-center">
-                    <button id="nextBtn" class="bg-gray-700/50 hover:bg-gray-600/50 text-white p-2 rounded-full m-2">
+                    <button id="nextBtn" class="slider-arrow p-2 rounded-full m-2">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                 </div>
@@ -238,28 +308,28 @@
         </section>
 
         <!-- Education Section -->
-        <section id="education" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12">Education</h2>
+        <section id="education" class="py-20 fade-in-section">
+            <h2 class="text-4xl font-bold text-center mb-12">Education</h2>
             <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
                 <!-- MSc Degree -->
-                <div class="bg-gray-800 rounded-xl shadow-2xl p-8">
-                    <h3 class="text-2xl font-bold text-white mb-2">MSc. Distributed Software Systems</h3>
+                <div class="card rounded-xl p-8">
+                    <h3 class="text-2xl font-bold mb-2">MSc. Distributed Software Systems</h3>
                     <a href="https://www.tu-darmstadt.de/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 transition-colors duration-300 block mb-1">
                         Technische Universität Darmstadt
                     </a>
-                    <p class="text-gray-400 mb-4">Germany (10/2014 - 11/2017)</p>
-                    <p class="text-gray-300">
+                    <p class="mb-4" style="color: var(--subtle-text-color);">Germany (10/2014 - 11/2017)</p>
+                    <p>
                         <strong>Focus:</strong> Distributed Systems, Networking, Middleware, Enterprise Architecture Management, Site Reliability Engineering.
                     </p>
                 </div>
                 <!-- BS Degree -->
-                <div class="bg-gray-800 rounded-xl shadow-2xl p-8">
-                    <h3 class="text-2xl font-bold text-white mb-2">BS Computer Science</h3>
+                <div class="card rounded-xl p-8">
+                    <h3 class="text-2xl font-bold mb-2">BS Computer Science</h3>
                     <a href="https://khi.nu.edu.pk/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 transition-colors duration-300 block mb-1">
                         National University of Computer and Emerging Sciences
                     </a>
-                    <p class="text-gray-400 mb-4">Pakistan (2007 - 2011)</p>
-                    <p class="text-gray-300">
+                    <p class="mb-4" style="color: var(--subtle-text-color);">Pakistan (2007 - 2011)</p>
+                    <p>
                         <strong>Focus:</strong> Databases, Computer Networks, AI, Web-Development.
                     </p>
                 </div>
@@ -267,34 +337,33 @@
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 text-center">
-            <h2 class="text-4xl font-bold text-white mb-4">Let's Connect</h2>
-            <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">Have a question or want to work together? Fill out the form below.</p>
-            
+        <section id="contact" class="py-20 text-center fade-in-section">
+            <h2 class="text-4xl font-bold text-center mb-4">Let's Connect</h2>
+            <p class="mb-8 max-w-2xl mx-auto" style="color: var(--subtle-text-color);">Have a question or want to work together? Fill out the form below.</p>
             <form id="contact-form" class="max-w-xl mx-auto text-left space-y-4">
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-300">Your Name</label>
-                    <input type="text" id="name" name="name" required class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <label for="name" class="block text-sm font-medium">Your Name</label>
+                    <input type="text" id="name" name="name" required class="form-input mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-300">Your Email</label>
-                    <input type="email" id="email" name="email" required class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <label for="email" class="block text-sm font-medium">Your Email</label>
+                    <input type="email" id="email" name="email" required class="form-input mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <div class="flex justify-between items-center">
-                        <label for="message" class="block text-sm font-medium text-gray-300">Message</label>
+                        <label for="message" class="block text-sm font-medium">Message</label>
                         <button type="button" id="draft-message-btn" class="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1">
                             ✨ Help me draft a message
                             <span id="draft-loader" class="hidden h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></span>
                         </button>
                     </div>
-                    <textarea id="message" name="message" rows="4" required class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    <textarea id="message" name="message" rows="4" required class="form-input mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                 </div>
                 <div class="text-center">
                     <button type="submit" id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform duration-300 transform hover:scale-105">
                         Send Message
                     </button>
-                    <p id="form-status" class="mt-4 text-sm text-gray-400"></p>
+                    <p id="form-status" class="mt-4 text-sm"></p>
                 </div>
             </form>
         </section>
@@ -302,20 +371,20 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-center py-6">
+    <footer class="text-center py-6" style="background-color: var(--card-bg-color);">
         <div class="flex justify-center items-center gap-6 mb-4">
-            <a href="https://www.linkedin.com/in/m-ahsan-abbasi/" target="_blank" rel="noopener noreferrer" aria-label="View my LinkedIn profile" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+            <a href="https://www.linkedin.com/in/m-ahsan-abbasi/" target="_blank" rel="noopener noreferrer" aria-label="View my LinkedIn profile" class="hover:text-blue-400 transition-colors duration-300">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                 </svg>
             </a>
-            <a href="https://github.com/mahsan87" target="_blank" rel="noopener noreferrer" aria-label="View my GitHub profile" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+            <a href="https://github.com/mahsan87" target="_blank" rel="noopener noreferrer" aria-label="View my GitHub profile" class="hover:text-blue-400 transition-colors duration-300">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
             </a>
         </div>
-        <p class="text-gray-500">&copy; 2025 M. Ahsan Abbasi. All Rights Reserved.</p>
+        <p style="color: var(--subtle-text-color);">&copy; 2025 M. Ahsan Abbasi. All Rights Reserved.</p>
     </footer>
 
     <!-- Gemini Helper Modal -->
@@ -331,150 +400,211 @@
         </div>
     </div>
 
-
-    <!-- JavaScript for Mobile Menu, Slider, and Contact Form -->
+    <!-- JavaScript -->
     <script>
-        // --- Mobile Menu ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Switcher ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
 
-        // --- Credentials Slider ---
-        const sliderWrapper = document.querySelector('.slider-wrapper');
-        if (sliderWrapper) {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const slides = document.querySelectorAll('.slider-item');
-            let currentIndex = 0;
-            const totalSlides = slides.length;
-
-            function updateSlider() {
-                sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }
-
-            nextBtn.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % totalSlides;
-                updateSlider();
-            });
-
-            prevBtn.addEventListener('click', () => {
-                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-                updateSlider();
-            });
-        }
-
-        // --- Gemini API & Contact Form Logic ---
-        const draftMessageBtn = document.getElementById('draft-message-btn');
-        const draftModal = document.getElementById('draft-modal');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-        const modalOptionBtns = document.querySelectorAll('.modal-option-btn');
-        const messageTextarea = document.getElementById('message');
-        const nameInput = document.getElementById('name');
-        const emailInput = document.getElementById('email');
-        const draftLoader = document.getElementById('draft-loader');
-        const contactForm = document.getElementById('contact-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const formStatus = document.getElementById('form-status');
-
-        draftMessageBtn.addEventListener('click', () => {
-            if (!nameInput.checkValidity()) {
-                nameInput.reportValidity();
-                return;
-            }
-            if (!emailInput.checkValidity()) {
-                emailInput.reportValidity();
-                return;
-            }
-            draftModal.classList.remove('hidden');
-        });
-
-        closeModalBtn.addEventListener('click', () => {
-            draftModal.classList.add('hidden');
-        });
-        
-        draftModal.addEventListener('click', (e) => {
-            if (e.target === draftModal) {
-                 draftModal.classList.add('hidden');
-            }
-        });
-
-        modalOptionBtns.forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const purpose = btn.textContent;
-                const name = nameInput.value || 'there';
-                draftModal.classList.add('hidden');
-                draftLoader.classList.remove('hidden');
-                messageTextarea.value = "✨ Drafting a message for you...";
-
-                const prompt = `You are a professional assistant helping someone draft a message to M. Ahsan Abbasi, a backend engineer. The sender's name is '${name}'. The purpose of the message is a '${purpose}'. Draft a friendly, concise, and professional message of about 50-70 words. Start the message with "Hi Ahsan,".`;
-                
-                try {
-                    const geminiProxyUrl = 'https://getapikey-982367067186.europe-west3.run.app';
-                    const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-
-                    const response = await fetch(geminiProxyUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-                    const result = await response.json();
-                    
-                    if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
-                        messageTextarea.value = result.candidates[0].content.parts[0].text;
-                    } else {
-                       throw new Error("Invalid response structure from API.");
-                    }
-
-                } catch (error) {
-                    console.error("Error calling Gemini API:", error);
-                    messageTextarea.value = "Sorry, I couldn't draft a message right now. Please write your own.";
-                } finally {
-                    draftLoader.classList.add('hidden');
+            const applyTheme = (theme) => {
+                if (theme === 'light') {
+                    document.documentElement.classList.add('light');
+                    lightIcon.classList.remove('hidden');
+                    darkIcon.classList.add('hidden');
+                } else {
+                    document.documentElement.classList.remove('light');
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
                 }
-            });
-        });
-        
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-            formStatus.textContent = '';
-
-            const formData = {
-                name: nameInput.value,
-                email: emailInput.value,
-                message: messageTextarea.value,
             };
 
-            try {
-                const emailFunctionUrl = 'https://sendemail-982367067186.europe-west3.run.app';
+            const savedTheme = localStorage.getItem('theme');
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            const initialTheme = savedTheme || (prefersLight ? 'light' : 'dark');
+            applyTheme(initialTheme);
 
-                const response = await fetch(emailFunctionUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData),
-                });
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
 
-                if (response.ok) {
-                    formStatus.textContent = 'Thank you for your message!';
-                    contactForm.reset();
+            // --- Terminal Typing Effect ---
+            const terminal = document.getElementById('terminal-intro');
+            const lines = [
+                "Hey, I'm M. Ahsan Abbasi.",
+                "Backend Engineer specializing in scalable and resilient enterprise systems."
+            ];
+            let lineIndex = 0;
+            let charIndex = 0;
+
+            function type() {
+                if (lineIndex < lines.length) {
+                    let currentLine = lines.slice(0, lineIndex).join('<br>');
+                    if(lineIndex > 0) currentLine += '<br>';
+                    
+                    if (charIndex < lines[lineIndex].length) {
+                        terminal.innerHTML = currentLine + lines[lineIndex].substring(0, charIndex + 1) + '<span class="terminal-cursor"></span>';
+                        charIndex++;
+                        setTimeout(type, 50);
+                    } else {
+                        terminal.innerHTML = currentLine + lines[lineIndex] + '<span class="terminal-cursor"></span>';
+                        lineIndex++;
+                        charIndex = 0;
+                        setTimeout(type, 1000);
+                    }
                 } else {
-                    throw new Error('Failed to send message.');
+                     terminal.innerHTML = lines.join('<br>') + '<span class="terminal-cursor"></span>';
                 }
-            } catch (error) {
-                console.error('Error sending email:', error);
-                formStatus.textContent = 'Sorry, there was an error. Please try again later.';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
+            }
+            if(terminal) type();
+            
+            // --- Scroll Animations ---
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => observer.observe(section));
+
+            // --- Mobile Menu ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const desktopNav = document.querySelector('.hidden.md\\:flex');
+            
+            if (mobileMenu && desktopNav) {
+                mobileMenu.innerHTML = desktopNav.innerHTML;
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // --- Gemini API & Contact Form Logic ---
+            const draftMessageBtn = document.getElementById('draft-message-btn');
+            const draftModal = document.getElementById('draft-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalOptionBtns = document.querySelectorAll('.modal-option-btn');
+            const messageTextarea = document.getElementById('message');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const draftLoader = document.getElementById('draft-loader');
+            const contactForm = document.getElementById('contact-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const formStatus = document.getElementById('form-status');
+
+            if (draftMessageBtn) {
+                draftMessageBtn.addEventListener('click', () => {
+                    if (!nameInput.checkValidity()) {
+                        nameInput.reportValidity();
+                        return;
+                    }
+                    if (!emailInput.checkValidity()) {
+                        emailInput.reportValidity();
+                        return;
+                    }
+                    draftModal.classList.remove('hidden');
+                });
+            }
+
+            if(closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => {
+                    draftModal.classList.add('hidden');
+                });
+            }
+            
+            if(draftModal) {
+                draftModal.addEventListener('click', (e) => {
+                    if (e.target === draftModal) {
+                         draftModal.classList.add('hidden');
+                    }
+                });
+            }
+
+            if(modalOptionBtns) {
+                modalOptionBtns.forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const purpose = btn.textContent;
+                        const name = nameInput.value || 'there';
+                        draftModal.classList.add('hidden');
+                        draftLoader.classList.remove('hidden');
+                        messageTextarea.value = "✨ Drafting a message for you...";
+
+                        const prompt = `You are a professional assistant helping someone draft a message to M. Ahsan Abbasi, a backend engineer. The sender's name is '${name}'. The purpose of the message is a '${purpose}'. Draft a friendly, concise, and professional message of about 50-70 words. Start the message with "Hi Ahsan,".`;
+                        
+                        try {
+                            const geminiProxyUrl = 'https://getapikey-982367067186.europe-west3.run.app';
+                            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+                            const response = await fetch(geminiProxyUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+
+                            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                            const result = await response.json();
+                            
+                            if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+                                messageTextarea.value = result.candidates[0].content.parts[0].text;
+                            } else {
+                               throw new Error("Invalid response structure from API.");
+                            }
+
+                        } catch (error) {
+                            console.error("Error calling Gemini API:", error);
+                            messageTextarea.value = "Sorry, I couldn't draft a message right now. Please write your own.";
+                        } finally {
+                            draftLoader.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+            
+            if(contactForm) {
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Sending...';
+                    formStatus.textContent = '';
+
+                    const formData = {
+                        name: nameInput.value,
+                        email: emailInput.value,
+                        message: messageTextarea.value,
+                    };
+
+                    try {
+                        const emailFunctionUrl = 'https://sendemail-982367067186.europe-west3.run.app';
+
+                        const response = await fetch(emailFunctionUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(formData),
+                        });
+
+                        if (response.ok) {
+                            formStatus.textContent = 'Thank you for your message!';
+                            contactForm.reset();
+                        } else {
+                            throw new Error('Failed to send message.');
+                        }
+                    } catch (error) {
+                        console.error('Error sending email:', error);
+                        formStatus.textContent = 'Sorry, there was an error. Please try again later.';
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Send Message';
+                    }
+                });
             }
         });
-
     </script>
 </body>
 </html>
