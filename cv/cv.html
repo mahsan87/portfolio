@@ -15,10 +15,38 @@
 
     <!-- Custom Styles -->
     <style>
+        /* --- Base & Theme Variables --- */
+        :root {
+            --bg-color: #111827;
+            --text-color: #d1d5db;
+            --card-bg-color: #1f2937;
+            --header-bg-color: rgba(17, 24, 39, 0.8);
+            --highlight-color: #3b82f6;
+            --subtle-text-color: #9ca3af;
+        }
+        html.light {
+            --bg-color: #f9fafb;
+            --text-color: #374151;
+            --card-bg-color: #ffffff;
+            --header-bg-color: rgba(255, 255, 255, 0.8);
+            --highlight-color: #2563eb;
+            --subtle-text-color: #6b7280;
+        }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #111827; /* Dark background */
             color: #d1d5db; /* Light gray text */
+        }
+        header {
+            background-color: var(--header-bg-color);
+        }
+        .card {
+            background-color: var(--card-bg-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s;
+        }
+        html.light .card {
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
     </style>
 </head>
@@ -52,6 +80,38 @@
         <p class="text-gray-500">&copy; 2025 M. Ahsan Abbasi. All Rights Reserved.</p>
     </footer>
 
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Switcher ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+            const applyTheme = (theme) => {
+                if (theme === 'light') {
+                    document.documentElement.classList.add('light');
+                    lightIcon.classList.remove('hidden');
+                    darkIcon.classList.add('hidden');
+                } else {
+                    document.documentElement.classList.remove('light');
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                }
+            };
+
+            const savedTheme = localStorage.getItem('theme');
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            const initialTheme = savedTheme || (prefersLight ? 'light' : 'dark');
+            applyTheme(initialTheme);
+
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
+        });
+    </script>
 </body>
 </html>
 
