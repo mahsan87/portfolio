@@ -508,26 +508,20 @@
                         } else {
                             clone.classList.add('hover:bg-gray-700'); 
                         }
+                        mobileMenu.appendChild(clone);
                     } else if (clone.tagName === 'BUTTON') {
-                        // For the theme toggle, we need to re-attach the event listener
                         const mobileThemeToggle = clone;
-                        mobileThemeToggle.id = 'mobile-theme-toggle'; // Use a different ID
-                        const mobileDarkIcon = mobileThemeToggle.querySelector('#theme-toggle-dark-icon');
-                        const mobileLightIcon = mobileThemeToggle.querySelector('#theme-toggle-light-icon');
-                        mobileDarkIcon.id = 'mobile-theme-toggle-dark-icon';
-                        mobileLightIcon.id = 'mobile-theme-toggle-light-icon';
+                        mobileThemeToggle.id = 'mobile-theme-toggle'; 
                         
                         mobileThemeToggle.addEventListener('click', () => {
-                             themeToggleBtn.click(); // Trigger the main button's click event
+                             themeToggleBtn.click();
                         });
                         
-                        // Center the button
                         const wrapper = document.createElement('div');
                         wrapper.classList.add('flex', 'justify-center', 'mt-4');
                         wrapper.appendChild(mobileThemeToggle);
-                        clone = wrapper;
+                        mobileMenu.appendChild(wrapper);
                     }
-                    mobileMenu.appendChild(clone);
                 });
 
                 mobileMenuButton.addEventListener('click', () => {
