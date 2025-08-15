@@ -152,7 +152,7 @@
         <nav class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="text-2xl font-bold">M. Ahsan Abbasi</div>
-                <div class="hidden md:flex items-center space-x-8">
+                <div class="hidden md:flex items-center space-x-8" id="desktop-nav">
                     <a href="#home" class="hover:text-blue-400 transition-colors duration-300">Home</a>
                     <a href="#about" class="hover:text-blue-400 transition-colors duration-300">About</a>
                     <a href="#skills" class="hover:text-blue-400 transition-colors duration-300">Skills</a>
@@ -494,29 +494,40 @@
             // --- Mobile Menu ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            const desktopNav = document.querySelector('.hidden.md\\:flex');
+            const desktopNav = document.getElementById('desktop-nav');
             
             if (mobileMenu && desktopNav) {
-                // Clear any existing mobile menu content
                 mobileMenu.innerHTML = ''; 
                 
-                // Loop through desktop nav items and clone only the links for mobile
                 Array.from(desktopNav.children).forEach(node => {
-                    // We only want to clone A tags (links) and not BUTTON tags
-                    if (node.tagName === 'A') {
-                        const linkClone = node.cloneNode(true);
-                        // Add classes for mobile styling
-                        linkClone.classList.add('block', 'text-center', 'py-2', 'rounded-lg');
-                        
-                        // Special styling for the CV button
-                        if(linkClone.href.includes('cv.html')) {
-                            linkClone.classList.add('mt-2');
+                    const clone = node.cloneNode(true);
+                    if (clone.tagName === 'A') {
+                        clone.classList.add('block', 'text-center', 'py-2', 'rounded-lg');
+                        if(clone.href.includes('cv.html')) {
+                            clone.classList.add('mt-2');
                         } else {
-                            // Add a hover effect for regular links
-                            linkClone.classList.add('hover:bg-gray-700'); 
+                            clone.classList.add('hover:bg-gray-700'); 
                         }
-                        mobileMenu.appendChild(linkClone);
+                    } else if (clone.tagName === 'BUTTON') {
+                        // For the theme toggle, we need to re-attach the event listener
+                        const mobileThemeToggle = clone;
+                        mobileThemeToggle.id = 'mobile-theme-toggle'; // Use a different ID
+                        const mobileDarkIcon = mobileThemeToggle.querySelector('#theme-toggle-dark-icon');
+                        const mobileLightIcon = mobileThemeToggle.querySelector('#theme-toggle-light-icon');
+                        mobileDarkIcon.id = 'mobile-theme-toggle-dark-icon';
+                        mobileLightIcon.id = 'mobile-theme-toggle-light-icon';
+                        
+                        mobileThemeToggle.addEventListener('click', () => {
+                             themeToggleBtn.click(); // Trigger the main button's click event
+                        });
+                        
+                        // Center the button
+                        const wrapper = document.createElement('div');
+                        wrapper.classList.add('flex', 'justify-center', 'mt-4');
+                        wrapper.appendChild(mobileThemeToggle);
+                        clone = wrapper;
                     }
+                    mobileMenu.appendChild(clone);
                 });
 
                 mobileMenuButton.addEventListener('click', () => {
